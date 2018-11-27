@@ -228,19 +228,29 @@ public class Lab07
 		Scanner input = new Scanner(System.in);
 		int exit=0;
 		connect_to_database();
-		System.out.print("name: ");
-		String user_name=input.nextLine();
+		System.out.print("username: ");
+		String username=input.nextLine();
 		System.out.print("password");
 		String password=input.nextLine();
 		try
 		{
 			statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("select u_userID from users where u_name='"+user_name+"' and password='"+password"'");
-			int rs_userID=0;
+			ResultSet rs = statement.executeQuery("select u_userID, u_admin from users where u_username='"+username+"' and password='"+password"'");
+			int rs_u_userID=0;
 			//verify the user
 			while(rs.next())
 			{
-				rs_userID=
+				rs_u_userID=rs.getInt("u_userID");
+				rs_u_admin=rs.getInt("u_admin");
+			}
+			if(rs_userID==0)
+			{
+				System.out.println("Invalid username or password");
+				exit=1;
+			}
+			else
+			{
+				
 			}
 		}
 		catch(SQLException e)
