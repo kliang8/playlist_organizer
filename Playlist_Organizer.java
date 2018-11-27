@@ -7,7 +7,21 @@ import java.util.*;
 
 public class Lab07
 {
-	public static int table_size=0;
+	public static Connection connection = null;
+
+	public static void connect_to_database()
+	{
+		try
+		{
+			connection = DriverManager.getConnection("jdbc:sqlite:playlist_organizer.db");
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30);
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+		}
+	}
 
 	public static void create_warehouse_table()
 	{
@@ -194,22 +208,13 @@ public class Lab07
 		}
 	}
 
-	public static void find_warehouses_in_nation()
+	public static void disconnect_from_database()
 	{
-		//print all warehouses in a nation, print in descending order by capacity
-		Scanner input = new Scanner(System.in);
-		System.out.print("Enter country name: ");
-		String input_nation;
-		input_nation=input.nextLine();
 		try
 		{
-			Statement statement = connection.createStatement();
-			statement.setQueryTimeout(30);
-			ResultSet rs = statement.executeQuery("select w_name from warehouse,nation where w_nationkey=n_nationkey and n_name like '"+input_nation+"' order by w_capacity desc");
-			while(rs.next())
+			if(connection!=null)
 			{
-				System.out.println(rs.getString("w_name"));
-				//iterate each name
+				connection.close();
 			}
 		}
 		catch(SQLException e)
@@ -222,16 +227,7 @@ public class Lab07
 	{
 		Scanner input = new Scanner(System.in);
 		int exit=0;
-		try
-		{
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:playlist_organizer.db");
-			Statement statement = connection.createStatement();
-			statement.setQueryTimeout(30);
-		}
-		catch(SQLException e)
-		{
-			System.err.println(e.getMessage());
-		}
+		connect_to_database();
 		System.out.print("name: ");
 		String user_name=input.nextLine();
 		System.out.print("password");
@@ -239,7 +235,13 @@ public class Lab07
 		try
 		{
 			statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("select * from users where u_name='"+user_name+"' and password='"+password"'");
+			ResultSet rs = statement.executeQuery("select u_userID from users where u_name='"+user_name+"' and password='"+password"'");
+			int rs_userID=0;
+			//verify the user
+			while(rs.next())
+			{
+				rs_userID=
+			}
 		}
 		catch(SQLException e)
 		{
@@ -249,16 +251,7 @@ public class Lab07
 		{
 
 		}
-		try
-		{
-			if(connection!=null)
-			{
-				connection.close();
-			}
-		}
-		catch(SQLException e)
-		{
-			System.err.println(e.getMessage());
-		}
+		//closing the connection
+		disconnect_from_database();
 	}
 }
