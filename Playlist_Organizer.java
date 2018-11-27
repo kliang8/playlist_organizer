@@ -223,6 +223,65 @@ public class Lab07
 		}
 	}
 
+	
+	
+	public static void add_user()
+	{	//Manage user : add or delete
+		boolean fail = false;
+		String input_username, input_fullname, input_age, input_country, input_admin, input_password
+		int u_userID = 0;
+		Scanner input = new Scanner(System.in);
+
+		System.out.print("Username: ");
+		input_username = input.nextLine();
+
+		System.out.print("Password: ");
+		input_password = input.nextLine();		
+
+		System.out.print("Fullname: ");
+		input_fullname = input.nextLine();
+
+		System.out.print("Age: ");
+		input_age = input.nextLine();
+
+		System.out.print("Country: ");
+		input_country = input.nextLine();
+
+		System.out.print("Admin Power: Y/N ");
+		input_admin = input.nextLine();		
+
+		try
+		{
+				Statement statement = connection.createStatement();
+				statement.setQueryTimeout(30);
+				ResultSet rs = statement.executeQuery("select u_userID from users where u_username like '"+input_username+"' ");
+				
+				while(rs.next())
+				{
+					u_userID = rs.getInt("u_userID");
+				}
+				if(u_userID != 0)
+				{
+					System.out.println("Username Already Exists");
+					fail = true;
+				}
+				else
+				{
+					statement.executeUpdate("insert into users(u_username, u_fullname, u_age, u_country, u_admin, u_password) values ("+u_username+",'"+u_fullname+"',"+u_age+","+u_country+",'"+u_admin+"',"+u_password+")");
+				}
+			}
+			catch(SQLException e)
+			{
+				System.err.println(e.getMessage());
+			}
+			if(fail == false)
+			{
+				System.out.println("User added");
+			}
+
+	}
+	
+	
 	public static void main(String[] args)
 	{
 		Scanner input = new Scanner(System.in);
