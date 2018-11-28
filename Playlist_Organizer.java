@@ -225,6 +225,7 @@ public class Lab07
 
 	
 	
+
 	public static void add_user()
 	{	//Manage user : add or delete
 		boolean fail = false;
@@ -280,6 +281,109 @@ public class Lab07
 			}
 
 	}
+
+
+	public static void add_song()
+	{	
+		boolean fail = false;
+		String input_songname, input_artistname, input_albumname, input_genrename, input_language;
+		int u_userID = 0;
+		Scanner input = new Scanner(System.in);
+
+		System.out.print("Song: ");
+		input_songname = input.nextLine();
+
+		System.out.print("Artist: ");
+		input_artistname = input.nextLine();	
+
+		System.out.print("Album: ");
+		input_albumname = input.nextLine();
+
+		System.out.print("Genre: ");
+		input_genrename = input.nextLine();
+		
+		System.out.print("Language ");
+		input_lanuage = input.nextLine();
+
+		try
+		{
+				Statement statement = connection.createStatement();
+				statement.setQueryTimeout(30);
+				ResultSet artistSet = statement.executeQuery("select a")
+				ResultSet rs = statement.executeQuery("select u_userID from users where u_username like '"+input_username+"' ");
+				
+				while(rs.next())
+				{
+					u_userID = rs.getInt("u_userID");
+				}
+				if(u_userID != 0)
+				{
+					System.out.println("Username Already Exists");
+					fail = true;
+				}
+				else
+				{
+					statement.executeUpdate("insert into users(u_username, u_fullname, u_age, u_country, u_admin, u_password) values ("+u_username+",'"+u_fullname+"',"+u_age+","+u_country+",'"+u_admin+"',"+u_password+")");
+				}
+			}
+			catch(SQLException e)
+			{
+				System.err.println(e.getMessage());
+			}
+			if(fail == false)
+			{
+				System.out.println("User added");
+			}
+
+	}
+
+
+
+	// public static void delete_user()
+	// {	//Manage user : add or delete
+	// 	boolean fail = false;
+	// 	String input_username, input_password
+	// 	int u_userID = 0;
+	// 	Scanner input = new Scanner(System.in);
+
+	// 	System.out.print("Username: ");
+	// 	input_username = input.nextLine();
+
+	// 	System.out.print("Password: ");
+	// 	input_password = input.nextLine();		
+	
+
+	// 	try
+	// 	{
+	// 			Statement statement = connection.createStatement();
+	// 			statement.setQueryTimeout(30);
+	// 			ResultSet rs = statement.executeQuery("select u_userID from users where u_username like '"+input_username+"' ");
+				
+	// 			while(rs.next())
+	// 			{
+	// 				u_userID = rs.getInt("u_userID");
+	// 			}
+	// 			if(u_userID != 0)
+	// 			{
+	// 				System.out.println("Username Already Exists");
+	// 				fail = true;
+	// 			}
+	// 			else
+	// 			{
+	// 				statement.executeUpdate("insert into users(u_username, u_fullname, u_age, u_country, u_admin, u_password) values ("+u_username+",'"+u_fullname+"',"+u_age+","+u_country+",'"+u_admin+"',"+u_password+")");
+	// 			}
+	// 		}
+	// 		catch(SQLException e)
+	// 		{
+	// 			System.err.println(e.getMessage());
+	// 		}
+	// 		if(fail == false)
+	// 		{
+	// 			System.out.println("User added");
+	// 		}
+
+	// }
+	
 	
 	
 	public static void main(String[] args)
